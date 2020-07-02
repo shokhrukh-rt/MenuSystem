@@ -15,7 +15,8 @@ UCLASS()
 class PUZZLEPLATFORMS_API UPuzzlePlatformsGameInstance : public UGameInstance
 {
 	GENERATED_BODY()
-public:
+public:	
+
 	UPuzzlePlatformsGameInstance(const FObjectInitializer& ObjectInitializer);
 	void Init();
 	
@@ -24,6 +25,9 @@ public:
 	
 	UFUNCTION(Exec)
 	void Join( const FString& Adress);
+
+	UFUNCTION(BlueprintCallable)
+	void LoadMenu();
 private:
 	TSubclassOf<UUserWidget> MenuClass;
 };
