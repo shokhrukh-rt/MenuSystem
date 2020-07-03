@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "MenuInterface.h"
 #include "MainMenu.generated.h"
 
 /**
@@ -18,11 +19,20 @@ protected:
 	virtual bool Initialize() override;
 	
 public:
+
+	void SetMenuInterface( IMenuInterface* MenuInterface);
+	void Setup();
+	void Teardown();
+
+private:
 	UFUNCTION()
 	void HostServer();
-
 	UPROPERTY(meta = (BindWidget))
 	class UButton* Host;
 	UPROPERTY(meta = (BindWidget))
 	class UButton* Join;
+
+
+
+	IMenuInterface* MenuInterface;
 };

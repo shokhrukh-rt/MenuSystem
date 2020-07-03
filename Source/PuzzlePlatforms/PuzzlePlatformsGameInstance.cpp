@@ -6,6 +6,7 @@
 #include "UObject/ConstructorHelpers.h"
 #include "PlatformTrigger.h"
 #include "Blueprint/UserWidget.h"
+#include "MenuSystem/MainMenu.h"
 #include "GameFramework/PlayerController.h"
 
 UPuzzlePlatformsGameInstance::UPuzzlePlatformsGameInstance(const FObjectInitializer& ObjectInitializer) {
@@ -16,30 +17,27 @@ UPuzzlePlatformsGameInstance::UPuzzlePlatformsGameInstance(const FObjectInitiali
 	
 }
 
+
 void UPuzzlePlatformsGameInstance::Init() {
 	UE_LOG(LogTemp, Warning, TEXT("Found Class %s"), *MenuClass->GetName());
 }
+
+
 void UPuzzlePlatformsGameInstance::LoadMenu(){
 
 	if (!ensure(MenuClass != nullptr)) { return; }
-	UUserWidget* Menu = CreateWidget<UUserWidget>(this, MenuClass);
+	Menu = CreateWidget<UMainMenu>(this, MenuClass);
 
 	if (!ensure(Menu != nullptr)) { return; }
-	Menu->AddToViewport();
-
-	APlayerController* PlayerController = GetFirstLocalPlayerController();
-	if (!ensure(PlayerController != nullptr)) { return; }
-
-	FInputModeUIOnly InputMode;
-	InputMode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
-	InputMode.SetWidgetToFocus(Menu->TakeWidget());
-
-	PlayerController->bShowMouseCursor = true;
-	PlayerController->SetInputMode(InputMode);
+	Menu->Setup();
+	Menu->SetMenuInterface(this);	
 
 }
 
+
 void UPuzzlePlatformsGameInstance::Host() {
+	
+
 	UEngine* Engine = GetEngine();
 	if (!ensure(Engine != nullptr)) { return; }
 
@@ -49,9 +47,10 @@ void UPuzzlePlatformsGameInstance::Host() {
 	if (!ensure(World != nullptr)) { return; }
 	World->ServerTravel("/Game/ThirdPersonCPP/Maps/ThirdPersonExampleMap?listen");
 
-
+	Menu->Teardown();
 
 }
+
 
 void UPuzzlePlatformsGameInstance::Join(const FString& Address) {
 	UEngine* Engine = GetEngine();

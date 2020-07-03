@@ -21,5 +21,44 @@ void UMainMenu::HostServer()
 {
 	UE_LOG(LogTemp, Warning, TEXT("HOST button is clicked!"));
 
+	if (MenuInterface != nullptr) {
+		MenuInterface->Host();
+	}
+
+
 }
 
+void UMainMenu::SetMenuInterface(IMenuInterface* MenuInterface) {
+	this->MenuInterface = MenuInterface;
+}
+
+void UMainMenu::Setup() {
+
+	this->AddToViewport();
+	UWorld* World = GetWorld();
+	APlayerController* PlayerController = World->GetFirstPlayerController();
+	if (!ensure(PlayerController != nullptr)) { return; }
+
+	FInputModeUIOnly InputMode;
+	InputMode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
+	InputMode.SetWidgetToFocus(this->TakeWidget());
+
+
+	PlayerController->bShowMouseCursor = true;
+	PlayerController->SetInputMode(InputMode);
+}
+
+
+void UMainMenu::Teardown() {
+
+	this->RemoveFromViewport();
+
+	FInputModeGameOnly InputMode;
+	UWorld* World = GetWorld();
+	APlayerController* PlayerController = World->GetFirstPlayerController();
+	if (!ensure(PlayerController != nullptr)) { return; }
+	PlayerController->SetInputMode(InputMode);
+
+	PlayerController->bShowMouseCursor = false;
+	
+}
