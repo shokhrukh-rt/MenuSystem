@@ -34,6 +34,9 @@ private:
 	UFUNCTION()
 	void JoinGame();
 
+	UFUNCTION()
+	void QuitGame();
+
 
 	//Bind Widgets and Buttons
 	UPROPERTY(meta = (BindWidget))
@@ -47,6 +50,9 @@ private:
 
 	UPROPERTY(meta = (BindWidget))
 	UButton* JoinGameButton;
+
+	UPROPERTY(meta = (BindWidget))
+	UButton* QuitButton;
 
 	UPROPERTY(meta = (BindWidget))
 	class UWidgetSwitcher* MenuSwitcher;

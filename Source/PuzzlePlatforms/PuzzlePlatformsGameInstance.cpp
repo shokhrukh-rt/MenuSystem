@@ -87,3 +87,10 @@ void UPuzzlePlatformsGameInstance::Join(const FString& Address) {
 
 	Menu->Teardown();
 }
+
+void UPuzzlePlatformsGameInstance::QuitGame() {
+
+	APlayerController* PlayerController = GetFirstLocalPlayerController();
+	if (!ensure(PlayerController != nullptr)) { return; }
+	PlayerController->ConsoleCommand(TEXT("quit"), true);
+}

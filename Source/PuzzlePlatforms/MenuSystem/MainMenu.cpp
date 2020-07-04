@@ -24,7 +24,17 @@ bool UMainMenu::Initialize() {
 	if (!ensure(JoinGameButton != nullptr)) return false;
 	JoinGameButton->OnClicked.AddDynamic(this, &UMainMenu::JoinGame);
 
+	if (!ensure(QuitButton != nullptr)) return false;
+	QuitButton->OnClicked.AddDynamic(this, &UMainMenu::QuitGame);
+
+
 	return true;
+}
+
+void UMainMenu::QuitGame() {
+
+	MenuInterface->QuitGame();
+
 }
 
 

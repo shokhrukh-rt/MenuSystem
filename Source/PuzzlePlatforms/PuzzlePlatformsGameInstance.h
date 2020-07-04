@@ -34,6 +34,7 @@ public:
 	void LoadInGameMenu();
 
 	virtual void LoadMainMenu() override;
+	virtual void QuitGame() override;
 
 
 private:
