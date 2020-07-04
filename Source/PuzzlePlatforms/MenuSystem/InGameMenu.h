@@ -9,13 +9,11 @@
 /**
  * 
  */
+
 UCLASS()
 class PUZZLEPLATFORMS_API UInGameMenu : public UMenuWidget
 {
-	GENERATED_BODY()/*
-
-public:
-	void LoadInGameMenu();
+	GENERATED_BODY()
 
 protected:
 	virtual bool Initialize() override;
@@ -24,10 +22,10 @@ private:
 	
 	//Buttons and Widgets
 	UPROPERTY(meta = (BindWidget))
-	class UButton* B_GoToMainMenu;
+	class UButton* B_Quit;
 
 	UPROPERTY(meta = (BindWidget))
-	UButton* B_CancelInGameMenu;
+	UButton* HostButton;
 
 	//Callback Functions
 
@@ -38,5 +36,5 @@ private:
 	void CancelInGameMenu();
 
 
-	*/
+	
 };

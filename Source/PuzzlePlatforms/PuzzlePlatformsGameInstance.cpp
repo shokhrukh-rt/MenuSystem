@@ -21,6 +21,13 @@ UPuzzlePlatformsGameInstance::UPuzzlePlatformsGameInstance(const FObjectInitiali
 	InGameMenuClass = InGameMenuBPClass.Class;
 }
 
+void UPuzzlePlatformsGameInstance::LoadMainMenu() {
+
+	APlayerController* PlayerController = GetFirstLocalPlayerController();
+	if (!ensure(PlayerController != nullptr)) { return; }
+	PlayerController->ClientTravel("/Game/Maps/MainMenu", ETravelType::TRAVEL_Absolute);
+}
+
 
 void UPuzzlePlatformsGameInstance::Init() {
 	UE_LOG(LogTemp, Warning, TEXT("Found Class %s"), *MenuClass->GetName());
