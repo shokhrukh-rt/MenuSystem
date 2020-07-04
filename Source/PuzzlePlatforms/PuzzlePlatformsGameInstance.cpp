@@ -15,6 +15,10 @@ UPuzzlePlatformsGameInstance::UPuzzlePlatformsGameInstance(const FObjectInitiali
 	if (!ensure(MenuClassBPClass.Class != nullptr)) { return; }
 	MenuClass = MenuClassBPClass.Class;
 	
+
+	ConstructorHelpers::FClassFinder<UUserWidget> InGameMenuBPClass(TEXT("/Game/ThirdPersonCPP/MenuSystem/InGameMenu"));
+	if (!ensure(InGameMenuBPClass.Class != nullptr)) { return; }
+	InGameMenuClass = InGameMenuBPClass.Class;
 }
 
 
@@ -34,9 +38,20 @@ void UPuzzlePlatformsGameInstance::LoadMenu(){
 
 }
 
+void UPuzzlePlatformsGameInstance::LoadInGameMenu() {
 
-void UPuzzlePlatformsGameInstance::Host() {
-	
+	if (!ensure(InGameMenuClass != nullptr)) { return; }
+	UMenuWidget* Menu = CreateWidget<UMenuWidget>(this, InGameMenuClass);
+
+	if (!ensure(Menu != nullptr)) { return; }
+	Menu->Setup();
+	Menu->SetMenuInterface(this);
+
+}
+
+
+
+void UPuzzlePlatformsGameInstance::Host() {	
 
 	UEngine* Engine = GetEngine();
 	if (!ensure(Engine != nullptr)) { return; }
@@ -53,6 +68,7 @@ void UPuzzlePlatformsGameInstance::Host() {
 
 
 void UPuzzlePlatformsGameInstance::Join(const FString& Address) {
+
 	UEngine* Engine = GetEngine();
 	if (!ensure(Engine != nullptr)) { return; }
 
@@ -61,4 +77,6 @@ void UPuzzlePlatformsGameInstance::Join(const FString& Address) {
 	APlayerController* PlayerController = GetFirstLocalPlayerController();
 	if (!ensure(PlayerController != nullptr)) { return; }
 	PlayerController->ClientTravel(Address, ETravelType::TRAVEL_Absolute);
+
+	Menu->Teardown();
 }
