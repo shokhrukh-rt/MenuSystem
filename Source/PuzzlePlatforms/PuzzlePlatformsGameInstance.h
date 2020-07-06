@@ -28,7 +28,7 @@ public:
 	void Join( const FString& Address) override;
 
 	UFUNCTION(BlueprintCallable)
-	void LoadMenu();
+	void LoadMenuWidget();
 
 	UFUNCTION(BlueprintCallable)
 	void LoadInGameMenu();

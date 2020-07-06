@@ -3,9 +3,11 @@
 
 #include "PuzzlePlatformsGameInstance.h"
 #include "Engine/Engine.h"
-#include "UObject/ConstructorHelpers.h"
-#include "PlatformTrigger.h"
+#include "OnlineSubsystem.h"
 #include "Blueprint/UserWidget.h"
+#include "UObject/ConstructorHelpers.h"
+
+#include "PlatformTrigger.h"
 #include "MenuSystem/MainMenu.h"
 #include "GameFramework/PlayerController.h"
 
@@ -30,11 +32,29 @@ void UPuzzlePlatformsGameInstance::LoadMainMenu() {
 
 
 void UPuzzlePlatformsGameInstance::Init() {
+
 	UE_LOG(LogTemp, Warning, TEXT("Found Class %s"), *MenuClass->GetName());
+
+	IOnlineSubsystem* Subsystem  = IOnlineSubsystem::Get();
+	if ( Subsystem != nullptr) { 
+		UE_LOG(LogTemp, Warning, TEXT("Subsystem %s is found"), *Subsystem->GetSubsystemName().ToString());
+		IOnlineSessionPtr SessionInterface = Subsystem->GetSessionInterface();
+		if (SessionInterface.IsValid()) {
+			UE_LOG(LogTemp, Warning, TEXT("WTF!!! Session Interface is found"));
+
+		}
+	
+	}
+	else {
+		UE_LOG(LogTemp, Warning, TEXT("Subsystem is not found"));
+	}
+
+
+	
 }
 
 
-void UPuzzlePlatformsGameInstance::LoadMenu(){
+void UPuzzlePlatformsGameInstance::LoadMenuWidget(){
 
 	if (!ensure(MenuClass != nullptr)) { return; }
 	Menu = CreateWidget<UMainMenu>(this, MenuClass);
