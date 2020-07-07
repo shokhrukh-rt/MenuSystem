@@ -2,11 +2,25 @@
 
 
 #include "MainMenu.h"
+#include "UObject/ConstructorHelpers.h"
 #include "Button.h"
 #include "WidgetSwitcher.h"
 #include "EditableTextBox.h"
+#include "TextBlock.h"
+#include "ServerRow.h"
+
+
 #include "PuzzlePlatformsGameInstance.h"
 
+// Contructor
+UMainMenu::UMainMenu(const FObjectInitializer& ObjectInitializer) {
+
+	ConstructorHelpers::FClassFinder<UUserWidget> ServerRowBPClass(TEXT("/Game/ThirdPersonCPP/MenuSystem/WBP_ServerRow"));
+	if (!ensure(ServerRowBPClass.Class != nullptr)) { return; }
+	ServerRowClass = ServerRowBPClass.Class;
+}
+
+// Initialize
 bool UMainMenu::Initialize() {
 
 	bool Success = Super::Initialize();
@@ -38,12 +52,31 @@ void UMainMenu::QuitGame() {
 }
 
 
+// JoinGame
 void UMainMenu::JoinGame() {
 
-	const FString& IpAddress = IPBox->Text.ToString();
-	if (MenuInterface != nullptr) {
-		MenuInterface->Join(IpAddress);
+	
+	MenuInterface->Join("");
+
+}
+
+
+// void SetServerList(TArray<FString> ServerName);
+void UMainMenu::SetServerList(TArray<FString> ServerNames) {
+
+	ServerList->ClearChildren();
+
+	for (const FString& ServerName : ServerNames) {
+
+		if (!ensure(ServerRowClass != nullptr)) { return; }
+		UServerRow* Row = CreateWidget<UServerRow>(this, ServerRowClass);
+
+		Row->ServerName->SetText(FText::FromString(ServerName));
+		ServerList->AddChild(Row);
+
 	}
+
+	
 }
 
 
@@ -55,12 +88,18 @@ void UMainMenu::HostServer()
 }
 
 
+// JoinMenu
 void UMainMenu::JoinMenu() {
 
 	if (!ensure(MenuSwitcher != nullptr)) { return; }
 	if (!ensure(Join_Menu != nullptr)) { return; }
 
 	MenuSwitcher->SetActiveWidget(Join_Menu);
+
+	if (MenuInterface != nullptr)
+	{
+		MenuInterface->RequestRefresh();
+	}
 	
 }
 

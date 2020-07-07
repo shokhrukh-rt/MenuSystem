@@ -27,5 +27,5 @@ public:
 	virtual void Join(const FString& Address) = 0;
 	virtual void LoadMainMenu() = 0;
 	virtual void QuitGame() = 0;
-
+	virtual void RequestRefresh() = 0;
 };

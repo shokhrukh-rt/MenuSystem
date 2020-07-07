@@ -20,6 +20,8 @@ class PUZZLEPLATFORMS_API UPuzzlePlatformsGameInstance : public UGameInstance, p
 	GENERATED_BODY()
 public:	
 
+	
+
 	UPuzzlePlatformsGameInstance(const FObjectInitializer& ObjectInitializer);
 	void Init();
 	
@@ -37,6 +39,8 @@ public:
 
 	virtual void LoadMainMenu() override;
 	virtual void QuitGame() override;
+	virtual void RequestRefresh() override;
+	void FindSessions();
 
 
 private:
