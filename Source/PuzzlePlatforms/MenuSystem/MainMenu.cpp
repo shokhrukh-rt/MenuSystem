@@ -45,6 +45,8 @@ bool UMainMenu::Initialize() {
 	return true;
 }
 
+
+// QuitGame
 void UMainMenu::QuitGame() {
 
 	MenuInterface->QuitGame();
@@ -52,9 +54,22 @@ void UMainMenu::QuitGame() {
 }
 
 
+// SetIndex
+void UMainMenu::SetIndex(uint32 Index) {
+
+	SelectedIndex = Index;
+}
+
+
 // JoinGame
 void UMainMenu::JoinGame() {
 
+	if (SelectedIndex.IsSet()) {
+		UE_LOG(LogTemp, Warning, TEXT("SElected indes id: %d"), SelectedIndex.GetValue());
+	}
+	else {
+		UE_LOG(LogTemp, Warning, TEXT("SElected index is not set"));
+	}
 	
 	MenuInterface->Join("");
 
@@ -65,6 +80,7 @@ void UMainMenu::JoinGame() {
 void UMainMenu::SetServerList(TArray<FString> ServerNames) {
 
 	ServerList->ClearChildren();
+	uint32 i = 0;
 
 	for (const FString& ServerName : ServerNames) {
 
@@ -72,8 +88,9 @@ void UMainMenu::SetServerList(TArray<FString> ServerNames) {
 		UServerRow* Row = CreateWidget<UServerRow>(this, ServerRowClass);
 
 		Row->ServerName->SetText(FText::FromString(ServerName));
-		ServerList->AddChild(Row);
-
+		Row->Setup(this, i);
+		++i;
+		ServerList->AddChild(Row);		
 	}
 
 	

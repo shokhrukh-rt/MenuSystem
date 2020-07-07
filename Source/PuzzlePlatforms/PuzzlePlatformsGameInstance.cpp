@@ -210,8 +210,7 @@ void UPuzzlePlatformsGameInstance::OnFindSessionsComplete(bool Success) {
 // Join
 void UPuzzlePlatformsGameInstance::Join(const FString& Address) {
 
-	
-
+	Menu->SetServerList({ "Test1", "TEst2" });
 	/*UEngine* Engine = GetEngine();
 	if (!ensure(Engine != nullptr)) { return; }
 

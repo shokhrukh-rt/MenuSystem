@@ -17,6 +17,7 @@ class PUZZLEPLATFORMS_API UMainMenu : public UMenuWidget
 public:
 	UMainMenu(const FObjectInitializer& ObjectInitializer);
 	void SetServerList(TArray<FString> ServerName);
+	void SetIndex(uint32);
 protected:
 	virtual bool Initialize() override;
 	
@@ -67,7 +68,7 @@ private:
 	UPROPERTY(meta = (BindWidget))
 	class UPanelWidget* ServerList;
 
-	
+	TOptional<uint32> SelectedIndex;
 
 	TSubclassOf<UUserWidget> ServerRowClass;
 	
