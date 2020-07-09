@@ -64,14 +64,16 @@ void UMainMenu::SetIndex(uint32 Index) {
 // JoinGame
 void UMainMenu::JoinGame() {
 
-	if (SelectedIndex.IsSet()) {
+	if (SelectedIndex.IsSet() && MenuInterface != nullptr) {
+
+		MenuInterface->Join(SelectedIndex.GetValue());
 		UE_LOG(LogTemp, Warning, TEXT("SElected indes id: %d"), SelectedIndex.GetValue());
 	}
 	else {
 		UE_LOG(LogTemp, Warning, TEXT("SElected index is not set"));
 	}
 	
-	MenuInterface->Join("");
+	
 
 }
 
