@@ -58,8 +58,22 @@ void UMainMenu::QuitGame() {
 void UMainMenu::SetIndex(uint32 Index) {
 
 	SelectedIndex = Index;
+	UpdateChildren();
 }
 
+
+// UpdateChildren
+void UMainMenu::UpdateChildren() {
+
+	for (int32 i = 0; i < ServerList->GetChildrenCount(); ++i) {
+
+		auto Row = Cast<UServerRow>(ServerList->GetChildAt(i));
+		if (Row != nullptr) {
+
+			Row->Selected = (SelectedIndex.IsSet() && SelectedIndex.GetValue() == i);
+		}
+	}
+}
 
 // JoinGame
 void UMainMenu::JoinGame() {
@@ -79,17 +93,19 @@ void UMainMenu::JoinGame() {
 
 
 // void SetServerList(TArray<FString> ServerName);
-void UMainMenu::SetServerList(TArray<FString> ServerNames) {
+void UMainMenu::SetServerList(TArray<FServerData> ServerNames) {
 
 	ServerList->ClearChildren();
 	uint32 i = 0;
 
-	for (const FString& ServerName : ServerNames) {
+	for (const FServerData& ServerData : ServerNames) {
 
 		if (!ensure(ServerRowClass != nullptr)) { return; }
 		UServerRow* Row = CreateWidget<UServerRow>(this, ServerRowClass);
 
-		Row->ServerName->SetText(FText::FromString(ServerName));
+		Row->ServerName->SetText(FText::FromString(ServerData.Name));
+		Row->HostUser->SetText(FText::FromString(ServerData.HostUsername));
+		Row->Fraction->SetText(FText::FromString(FString::Printf(TEXT("%d/%d"), i+1, ServerData.MaxPlayers)));
 		Row->Setup(this, i);
 		++i;
 		ServerList->AddChild(Row);		
