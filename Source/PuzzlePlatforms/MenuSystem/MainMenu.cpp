@@ -105,7 +105,7 @@ void UMainMenu::SetServerList(TArray<FServerData> ServerNames) {
 
 		Row->ServerName->SetText(FText::FromString(ServerData.Name));
 		Row->HostUser->SetText(FText::FromString(ServerData.HostUsername));
-		Row->Fraction->SetText(FText::FromString(FString::Printf(TEXT("%d/%d"), i+1, ServerData.MaxPlayers)));
+		Row->Fraction->SetText(FText::FromString(FString::Printf(TEXT("%d/%d"), ServerData.CurrentPlayers, ServerData.MaxPlayers)));
 		Row->Setup(this, i);
 		++i;
 		ServerList->AddChild(Row);		
