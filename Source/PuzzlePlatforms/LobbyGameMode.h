@@ -20,4 +20,7 @@ public:
 	
 private:
 	uint32 NumOfPlayers = 0;
+	void StartGame();
+
+	FTimerHandle MemberTimerHandle;
 };

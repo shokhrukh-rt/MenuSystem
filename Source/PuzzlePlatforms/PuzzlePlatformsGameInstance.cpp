@@ -13,7 +13,6 @@
 
 
 // Current Session Name
-const static FName SESSION_NAME = TEXT("Current Session");
 const static FName SERVER_NAME_SETTINGS_KEY = TEXT("SeverName");
 
 
@@ -122,10 +121,10 @@ void UPuzzlePlatformsGameInstance::Host(FString ServerName) {
 
 		DesiredServerName = ServerName;
 		
-		auto CurrentSession = SessionInterface->GetNamedSession(SESSION_NAME);
+		auto CurrentSession = SessionInterface->GetNamedSession(NAME_GameSession);
 		if (CurrentSession != nullptr)
 		{
-			SessionInterface->DestroySession(SESSION_NAME);
+			SessionInterface->DestroySession(NAME_GameSession);
 		}
 		else {
 
@@ -153,12 +152,12 @@ void UPuzzlePlatformsGameInstance::CreateSession() {
 			SessionSettings.bIsLANMatch = false;
 		}
 		
-		SessionSettings.NumPublicConnections = 2;
+		SessionSettings.NumPublicConnections = 5;
 		SessionSettings.bShouldAdvertise = true;
 		SessionSettings.bUsesPresence = true;
 		SessionSettings.Set(SERVER_NAME_SETTINGS_KEY, DesiredServerName, EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
 
-		SessionInterface->CreateSession(0, SESSION_NAME, SessionSettings);
+		SessionInterface->CreateSession(0, NAME_GameSession, SessionSettings);
 	}
 	
 }
@@ -241,7 +240,7 @@ void UPuzzlePlatformsGameInstance::Join(uint32 Index) {
 
 	if (!SessionInterface.IsValid()) { return; }
 
-	SessionInterface->JoinSession(0, SESSION_NAME, SearchSettings->SearchResults[Index]);
+	SessionInterface->JoinSession(0, NAME_GameSession, SearchSettings->SearchResults[Index]);
 
 	Menu->Teardown();
 }
@@ -275,4 +274,13 @@ void UPuzzlePlatformsGameInstance::QuitGame() {
 	APlayerController* PlayerController = GetFirstLocalPlayerController();
 	if (!ensure(PlayerController != nullptr)) { return; }
 	PlayerController->ConsoleCommand(TEXT("quit"), true);
+}
+
+
+// StartSession
+void UPuzzlePlatformsGameInstance::StartSession() {
+
+	if (SessionInterface.IsValid()) {
+		SessionInterface->StartSession(NAME_GameSession);
+	}
 }

@@ -43,6 +43,7 @@ public:
 	virtual void QuitGame() override;
 	virtual void RequestRefresh() override;
 	void FindSessions();
+	void StartSession();
 
 
 private:
