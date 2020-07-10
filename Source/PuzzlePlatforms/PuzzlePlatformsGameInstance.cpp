@@ -14,6 +14,7 @@
 
 // Current Session Name
 const static FName SESSION_NAME = TEXT("Current Session");
+const static FName SERVER_NAME_SETTINGS_KEY = TEXT("SeverName");
 
 
 // Constructor
@@ -115,9 +116,11 @@ void UPuzzlePlatformsGameInstance::LoadInGameMenu() {
 
 
 // Host
-void UPuzzlePlatformsGameInstance::Host() {
+void UPuzzlePlatformsGameInstance::Host(FString ServerName) {
 
 	if (SessionInterface.IsValid()) {
+
+		DesiredServerName = ServerName;
 		
 		auto CurrentSession = SessionInterface->GetNamedSession(SESSION_NAME);
 		if (CurrentSession != nullptr)
@@ -153,6 +156,8 @@ void UPuzzlePlatformsGameInstance::CreateSession() {
 		SessionSettings.NumPublicConnections = 2;
 		SessionSettings.bShouldAdvertise = true;
 		SessionSettings.bUsesPresence = true;
+
+		SessionSettings.Set(SERVER_NAME_SETTINGS_KEY, DesiredServerName, EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
 
 		SessionInterface->CreateSession(0, SESSION_NAME, SessionSettings);
 	}
@@ -211,13 +216,21 @@ void UPuzzlePlatformsGameInstance::OnFindSessionsComplete(bool Success) {
 				Data.MaxPlayers = Element.Session.SessionSettings.NumPublicConnections;
 				Data.CurrentPlayers = Data.MaxPlayers - Element.Session.NumOpenPublicConnections;
 				Data.HostUsername = Element.Session.OwningUserName;
-				ServerNames.Add(Data);
 				
+				FString ServerName;
+				if (Element.Session.SessionSettings.Get(SERVER_NAME_SETTINGS_KEY, ServerName)) {
+					Data.Name = ServerName;
+				}
+				else {
+					Data.Name = "Could Not Get Server Name";
+				}
+
+				ServerNames.Add(Data);
 			}
 			Menu->SetServerList(ServerNames);
 			
 	}
-	else {
+	else{
 		UE_LOG(LogTemp, Warning, TEXT("Online Sessions are NOT found"));
 	}
 

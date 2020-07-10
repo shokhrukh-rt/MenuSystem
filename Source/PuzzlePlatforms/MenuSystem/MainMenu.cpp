@@ -9,8 +9,8 @@
 #include "TextBlock.h"
 #include "ServerRow.h"
 
-
 #include "PuzzlePlatformsGameInstance.h"
+
 
 // Contructor
 UMainMenu::UMainMenu(const FObjectInitializer& ObjectInitializer) {
@@ -20,6 +20,7 @@ UMainMenu::UMainMenu(const FObjectInitializer& ObjectInitializer) {
 	ServerRowClass = ServerRowBPClass.Class;
 }
 
+
 // Initialize
 bool UMainMenu::Initialize() {
 
@@ -27,7 +28,7 @@ bool UMainMenu::Initialize() {
 	if (!Success) return false;
 	
 	if (!ensure(HostButton != nullptr)) return false;
-	HostButton->OnClicked.AddDynamic(this, &UMainMenu::HostServer);
+	HostButton->OnClicked.AddDynamic(this, &UMainMenu::OpenHostMenu);
 
 	if (!ensure(JoinButton != nullptr)) return false;
 	JoinButton->OnClicked.AddDynamic(this, &UMainMenu::JoinMenu);
@@ -41,6 +42,11 @@ bool UMainMenu::Initialize() {
 	if (!ensure(QuitButton != nullptr)) return false;
 	QuitButton->OnClicked.AddDynamic(this, &UMainMenu::QuitGame);
 
+	if (!ensure(QuitButton != nullptr)) return false;
+	HostButton_2->OnClicked.AddDynamic(this, &UMainMenu::HostServer);
+
+	if (!ensure(QuitButton != nullptr)) return false;
+	CancelButton_1->OnClicked.AddDynamic(this, &UMainMenu::BackToMM);
 
 	return true;
 }
@@ -50,6 +56,16 @@ bool UMainMenu::Initialize() {
 void UMainMenu::QuitGame() {
 
 	MenuInterface->QuitGame();
+
+}
+
+// OpenHostMenu
+void UMainMenu::OpenHostMenu() {
+
+	if (MenuSwitcher != nullptr) {
+
+		MenuSwitcher->SetActiveWidget(Host_Menu);
+	}
 
 }
 
@@ -74,6 +90,7 @@ void UMainMenu::UpdateChildren() {
 		}
 	}
 }
+
 
 // JoinGame
 void UMainMenu::JoinGame() {
@@ -115,10 +132,15 @@ void UMainMenu::SetServerList(TArray<FServerData> ServerNames) {
 }
 
 
+// HostServer
 void UMainMenu::HostServer()
 {
+	FText ServerName = ServerHostName->Text;
+
 	if (MenuInterface != nullptr) {
-		MenuInterface->Host();	}
+
+		MenuInterface->Host(ServerName.ToString());
+	}
 
 }
 
@@ -139,9 +161,7 @@ void UMainMenu::JoinMenu() {
 }
 
 
-
-
-
+// BackToMM
 void UMainMenu::BackToMM() {
 
 	if (!ensure(MenuSwitcher != nullptr)) { return; }

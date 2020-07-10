@@ -28,7 +28,7 @@ public:
 	void Init();
 	
 	UFUNCTION(Exec)
-	void Host() override;
+	void Host(FString ServerName) override;
 	
 	UFUNCTION(Exec)
 	void Join( uint32 Index) override;
@@ -53,6 +53,8 @@ private:
 	IOnlineSessionPtr SessionInterface;
 
 	TSharedPtr<class FOnlineSessionSearch> SearchSettings;
+
+	FString DesiredServerName;
 
 	void OnCreateSessionComplete(FName, bool);
 	void OnDestroySessionComplete(FName SessionName, bool Success);
